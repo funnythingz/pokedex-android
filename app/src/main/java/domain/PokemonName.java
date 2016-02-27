@@ -2,13 +2,13 @@ package domain;
 
 public class PokemonName {
 
-    String name;
+    String value;
 
-    public PokemonName(String name) {
-        this.name = name;
+    public PokemonName(String value) {
+        this.value = value;
     }
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 }

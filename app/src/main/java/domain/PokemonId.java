@@ -4,7 +4,7 @@ import ddd.AbstractIdentity;
 
 public class PokemonId extends AbstractIdentity<String> {
 
-    protected PokemonId(String value) {
+    public PokemonId(String value) {
         super(value);
     }
 }

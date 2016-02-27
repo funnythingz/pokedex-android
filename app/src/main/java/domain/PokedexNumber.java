@@ -1,13 +1,13 @@
 package domain;
 
 public class PokedexNumber {
-    String number;
+    String value;
 
-    public PokedexNumber(String number) {
-        this.number = number;
+    public PokedexNumber(String value) {
+        this.value = value;
     }
 
-    public String getNumber() {
-        return number;
+    public String getValue() {
+        return value;
     }
 }
