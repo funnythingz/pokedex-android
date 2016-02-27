@@ -1,4 +1,4 @@
-# PokedexAndroid
+# Pokedex Android
 
 簡易的なポケモン図鑑的なものをつくっている。
 
