@@ -15,6 +15,7 @@ import domain.Pokemon;
 import domain.PokemonId;
 import domain.PokemonName;
 import domain.PokemonNickname;
+import domain.PokemonRepository;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -28,6 +29,8 @@ public class AppActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // TODO: PokemonRepositoryからPokemonを受け取る
+        PokemonRepository pokemonRepository = new PokemonRepository();
+        Pokemon pokemon = pokemonRepository.findByNumber("25");
 
         // FIXME: Pokemonを生成する際はFactoryメソッドパターンを使うこと
         // FIXME: とりあえずダミーとしてPokemonを適当に生成してViewに組み込む
