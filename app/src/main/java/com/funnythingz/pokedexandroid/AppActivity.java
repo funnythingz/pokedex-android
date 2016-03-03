@@ -1,5 +1,6 @@
 package com.funnythingz.pokedexandroid;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import com.funnythingz.pokedexandroid.adapter.PokemonListAdapter;
 import com.funnythingz.pokedexandroid.domain.Pokemon;
 import com.funnythingz.pokedexandroid.domain.PokemonRepository;
+import com.funnythingz.pokedexandroid.helper.DialogHelper;
 import com.funnythingz.pokedexandroid.helper.RxBusProvider;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import rx.subscriptions.CompositeSubscription;
 public class AppActivity extends AppCompatActivity {
 
     private CompositeSubscription compositeSubscription;
+    private PokemonRepository pokemonRepository;
 
     @Bind(R.id.pokemon_list_view)
     ListView pokemonListView;
@@ -36,27 +39,8 @@ public class AppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
         ButterKnife.bind(this);
-
         refreshLayout.setOnRefreshListener(onRefreshListener);
-
-        PokemonRepository pokemonRepository = new PokemonRepository();
-        Observable<List<Pokemon>> observable = pokemonRepository.fetchPokemonList();
-        observable.subscribe(new Observer<List<Pokemon>>() {
-            @Override
-            public void onCompleted() {
-                Log.d("Completed", "");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("Error: ", "", e);
-            }
-
-            @Override
-            public void onNext(List<Pokemon> pokemons) {
-                RxBusProvider.getInstance().send(pokemons);
-            }
-        });
+        fetchPokemonListView();
     }
 
     @Override
@@ -86,6 +70,33 @@ public class AppActivity extends AppCompatActivity {
         ButterKnife.unbind(this);
     }
 
+    private void fetchPokemonListView() {
+
+        ProgressDialog progressDialog = DialogHelper.progressDialog(this, "しゅとくちゅう", false);
+        progressDialog.show();
+
+        pokemonRepository = new PokemonRepository();
+        Observable<List<Pokemon>> observable = pokemonRepository.fetchPokemonList();
+        observable.subscribe(new Observer<List<Pokemon>>() {
+            @Override
+            public void onCompleted() {
+                Log.d("Completed", "");
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("Error: ", "", e);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onNext(List<Pokemon> pokemons) {
+                RxBusProvider.getInstance().send(pokemons);
+            }
+        });
+    }
+
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
@@ -93,6 +104,7 @@ public class AppActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     refreshLayout.setRefreshing(false);
+                    fetchPokemonListView();
                 }
             });
         }
