@@ -20,7 +20,9 @@ public class PokemonListAdapter extends ArrayAdapter<Pokemon> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         PokemonListViewHolder holder;
+
         if (convertView != null) {
             holder = (PokemonListViewHolder) convertView.getTag();
         } else {
@@ -29,12 +31,15 @@ public class PokemonListAdapter extends ArrayAdapter<Pokemon> {
             holder = new PokemonListViewHolder(convertView);
             convertView.setTag(holder);
         }
+
         Pokemon pokemon = getItem(position);
 
         holder.nicknameTextView.setText(pokemon.getName().getValue());
+
         if (pokemon.getNickname() != null) {
             holder.nicknameTextView.setText(pokemon.getNickname().getValue());
         }
+
         return convertView;
     }
 }
