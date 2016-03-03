@@ -2,7 +2,7 @@ package infra;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PokemonData {
+public class GetPokemonResponseData {
 
     @SerializedName("id")
     private int id;
@@ -10,7 +10,7 @@ public class PokemonData {
     @SerializedName("name")
     private String name;
 
-    public PokemonData(int id, String name) {
+    public GetPokemonResponseData(int id, String name) {
         this.id = id;
         this.name = name;
     }

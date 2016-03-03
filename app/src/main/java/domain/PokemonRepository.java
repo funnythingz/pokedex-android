@@ -1,12 +1,12 @@
 package domain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import infra.PokemonAPI;
-import infra.PokemonData;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -14,40 +14,20 @@ public class PokemonRepository {
 
     final String ENDPOINT = "http://pokeapi.co/api/v2/";
 
-    private Retrofit retrofit = new Retrofit.Builder()
+    private PokemonAPI pokemonAPI = new Retrofit.Builder()
             .baseUrl(ENDPOINT)
             .addConverterFactory(GsonConverterFactory.create())
-            .build();
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build()
+            .create(PokemonAPI.class);
 
-    public Pokemon findByNumber(String pokemonNumber) {
-        PokemonAPI pokemonAPI = retrofit.create(PokemonAPI.class);
-
-        final ArrayList<Pokemon> pokemonList = new ArrayList<>();
-        pokemonAPI.getPokemonData(pokemonNumber)
-                .subscribeOn(Schedulers.io())
+    public Observable<List<Pokemon>> fetchPokemonList() {
+        return pokemonAPI.getPokemonResponseDataList()
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<PokemonData>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-
-                    }
-
-                    @Override
-                    public void onNext(PokemonData pokemonData) {
-                        pokemonList.add(new Pokemon(new PokemonId("1001111"),
-                                new PokedexNumber(String.valueOf(pokemonData.getId())),
-                                new PokemonName(pokemonData.getName()),
-                                null));
-                    }
+                .map(pokemonDatas -> {
+                    PokemonFactory pokemonFactory = new PokemonFactory();
+                    return pokemonFactory.createPokemonList(pokemonDatas);
                 });
-
-        Pokemon pokemon = pokemonList.get(0);
-        return pokemon;
-
     }
 }
