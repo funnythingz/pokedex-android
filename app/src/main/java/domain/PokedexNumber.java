@@ -3,6 +3,10 @@ package domain;
 public class PokedexNumber {
     String value;
 
+    public PokedexNumber(int number) {
+        this(String.valueOf(number));
+    }
+
     public PokedexNumber(String value) {
         this.value = value;
     }

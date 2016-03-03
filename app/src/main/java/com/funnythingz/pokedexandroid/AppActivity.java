@@ -1,25 +1,30 @@
 package com.funnythingz.pokedexandroid;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.funnythingz.pokedexandroid.adapter.PokemonListAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import domain.PokedexNumber;
 import domain.Pokemon;
-import domain.PokemonId;
-import domain.PokemonName;
-import domain.PokemonNickname;
+import domain.PokemonRepository;
+import rx.Observable;
+import rx.Observer;
 
 public class AppActivity extends AppCompatActivity {
 
     @Bind(R.id.pokemon_list_view)
     ListView pokemonListView;
+
+    @Bind(R.id.refresh)
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +32,26 @@ public class AppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         ButterKnife.bind(this);
 
-        // TODO: PokemonRepositoryからPokemonを受け取る
+        refreshLayout.setOnRefreshListener(onRefreshListener);
 
-        // FIXME: Pokemonを生成する際はFactoryメソッドパターンを使うこと
-        // FIXME: とりあえずダミーとしてPokemonを適当に生成してViewに組み込む
-        Pokemon pikachu = new Pokemon(new PokemonId("1001111"),
-                new PokedexNumber("25"),
-                new PokemonName("ピカチュウ"),
-                null);
-        Pokemon pikazo = new Pokemon(new PokemonId("1002222"),
-                new PokedexNumber("25"),
-                new PokemonName("ピカチュウ"),
-                new PokemonNickname("ぴか蔵"));
+        PokemonRepository pokemonRepository = new PokemonRepository();
+        Observable<List<Pokemon>> observable = pokemonRepository.fetchPokemonList();
+        observable.subscribe(new Observer<List<Pokemon>>() {
+            @Override
+            public void onCompleted() {
+                Log.d("Completed", "");
+            }
 
-        ArrayList<Pokemon> pokemons = new ArrayList<>();
-        pokemons.add(pikachu);
-        pokemons.add(pikazo);
+            @Override
+            public void onError(Throwable e) {
+                Log.e("Error: ", "", e);
+            }
 
-        PokemonListAdapter pokemonListAdapter = new PokemonListAdapter(getApplicationContext(), R.layout.adapter_pokemon_list, pokemons);
-        pokemonListView.setAdapter(pokemonListAdapter);
+            @Override
+            public void onNext(List<Pokemon> pokemons) {
+                pokemonListView.setAdapter(new PokemonListAdapter(getApplicationContext(), R.layout.adapter_pokemon_list, pokemons));
+            }
+        });
     }
 
     @Override
@@ -53,4 +59,16 @@ public class AppActivity extends AppCompatActivity {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
+
+    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    refreshLayout.setRefreshing(false);
+                }
+            });
+        }
+    };
 }
