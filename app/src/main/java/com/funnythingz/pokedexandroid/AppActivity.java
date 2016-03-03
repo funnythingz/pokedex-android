@@ -63,7 +63,6 @@ public class AppActivity extends AppCompatActivity {
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            // 3秒待機
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
