@@ -9,7 +9,7 @@ import rx.Observable;
 
 public class PokemonFactory {
 
-    public Pokemon createPokemon(GetPokemonResponseData getPokemonResponseData) {
+    public static Pokemon createPokemon(GetPokemonResponseData getPokemonResponseData) {
 
         return new Pokemon(null,
                 new PokedexNumber(getPokemonResponseData.getId()),
@@ -17,11 +17,11 @@ public class PokemonFactory {
                 null);
     }
 
-    public List<Pokemon> createPokemonList(List<GetPokemonResponseData> getPokemonResponseDataList) {
+    public static List<Pokemon> createPokemonList(List<GetPokemonResponseData> getPokemonResponseDataList) {
 
         ArrayList<Pokemon> pokemonList = new ArrayList<>();
         Observable.from(getPokemonResponseDataList)
-                .map(this::createPokemon)
+                .map(PokemonFactory::createPokemon)
                 .subscribe(pokemonList::add);
 
         return pokemonList;

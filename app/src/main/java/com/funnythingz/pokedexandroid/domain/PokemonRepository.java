@@ -15,6 +15,17 @@ public class PokemonRepository {
 
     final String ENDPOINT = "http://pokeapi.co/api/v2/";
 
+    private static final PokemonRepository pokemonRepository = new PokemonRepository();
+
+    private PokemonRepository() {
+        // No instances.
+    }
+
+    public static PokemonRepository getInstance() {
+        return pokemonRepository;
+    }
+
+
     private PokemonAPI pokemonAPI = new Retrofit.Builder()
             .baseUrl(ENDPOINT)
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,9 +37,6 @@ public class PokemonRepository {
         return pokemonAPI.getPokemonResponseDataList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(pokemonDatas -> {
-                    PokemonFactory pokemonFactory = new PokemonFactory();
-                    return pokemonFactory.createPokemonList(pokemonDatas);
-                });
+                .map(pokemonResponseData -> PokemonFactory.createPokemonList(pokemonResponseData));
     }
 }

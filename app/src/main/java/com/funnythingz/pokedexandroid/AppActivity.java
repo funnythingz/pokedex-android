@@ -26,7 +26,6 @@ import rx.subscriptions.CompositeSubscription;
 public class AppActivity extends AppCompatActivity {
 
     private CompositeSubscription compositeSubscription;
-    private PokemonRepository pokemonRepository;
 
     @Bind(R.id.pokemon_list_view)
     ListView pokemonListView;
@@ -75,8 +74,7 @@ public class AppActivity extends AppCompatActivity {
         ProgressDialog progressDialog = DialogHelper.progressDialog(this, "しゅとくちゅう", false);
         progressDialog.show();
 
-        pokemonRepository = new PokemonRepository();
-        Observable<List<Pokemon>> observable = pokemonRepository.fetchPokemonList();
+        Observable<List<Pokemon>> observable = PokemonRepository.getInstance().fetchPokemonList();
         observable.subscribe(new Observer<List<Pokemon>>() {
             @Override
             public void onCompleted() {
