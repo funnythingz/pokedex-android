@@ -1,4 +1,4 @@
-package com.funnythingz.pokedexandroid;
+package com.funnythingz.pokedexandroid.presentation;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -7,8 +7,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.funnythingz.pokedexandroid.adapter.PokemonListAdapter;
+import com.funnythingz.pokedexandroid.R;
+import com.funnythingz.pokedexandroid.presentation.adapter.PokemonListAdapter;
 import com.funnythingz.pokedexandroid.domain.Pokemon;
 import com.funnythingz.pokedexandroid.domain.PokemonRepository;
 import com.funnythingz.pokedexandroid.helper.DialogHelper;
@@ -22,6 +24,8 @@ import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -86,6 +90,7 @@ public class AppActivity extends AppCompatActivity {
             public void onError(Throwable e) {
                 Log.e("Error: ", "", e);
                 progressDialog.dismiss();
+                Toast.makeText(getApplication(), "つうしんできませんでした。", LENGTH_SHORT).show();
             }
 
             @Override

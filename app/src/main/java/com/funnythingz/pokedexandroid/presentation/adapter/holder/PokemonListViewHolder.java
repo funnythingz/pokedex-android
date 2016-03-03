@@ -1,4 +1,4 @@
-package com.funnythingz.pokedexandroid.adapter.holder;
+package com.funnythingz.pokedexandroid.presentation.adapter.holder;
 
 import android.view.View;
 import android.widget.TextView;

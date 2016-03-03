@@ -1,4 +1,4 @@
-package com.funnythingz.pokedexandroid.adapter;
+package com.funnythingz.pokedexandroid.presentation.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.funnythingz.pokedexandroid.R;
-import com.funnythingz.pokedexandroid.adapter.holder.PokemonListViewHolder;
+import com.funnythingz.pokedexandroid.presentation.adapter.holder.PokemonListViewHolder;
 import com.funnythingz.pokedexandroid.domain.Pokemon;
 
 import java.util.List;
