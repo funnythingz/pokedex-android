@@ -1,9 +1,10 @@
-package domain;
+package com.funnythingz.pokedexandroid.domain;
+
+import com.funnythingz.pokedexandroid.infra.GetPokemonResponseData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import infra.GetPokemonResponseData;
 import rx.Observable;
 
 public class PokemonFactory {

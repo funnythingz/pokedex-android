@@ -1,4 +1,4 @@
-package ddd;
+package com.funnythingz.pokedexandroid.ddd;
 
 import java.io.Serializable;
 

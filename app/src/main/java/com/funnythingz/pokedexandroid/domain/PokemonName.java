@@ -1,9 +1,10 @@
-package domain;
+package com.funnythingz.pokedexandroid.domain;
 
-public class PokemonNickname {
+public class PokemonName {
+
     String value;
 
-    public PokemonNickname(String value) {
+    public PokemonName(String value) {
         this.value = value;
     }
 

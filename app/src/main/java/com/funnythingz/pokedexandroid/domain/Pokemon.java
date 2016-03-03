@@ -1,6 +1,6 @@
-package domain;
+package com.funnythingz.pokedexandroid.domain;
 
-import ddd.AbstractEntity;
+import com.funnythingz.pokedexandroid.ddd.AbstractEntity;
 
 public class Pokemon extends AbstractEntity<PokemonId> {
 

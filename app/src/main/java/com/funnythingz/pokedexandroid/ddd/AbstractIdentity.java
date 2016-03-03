@@ -1,4 +1,4 @@
-package ddd;
+package com.funnythingz.pokedexandroid.ddd;
 
 public class AbstractIdentity<T> implements Identity<T> {
 

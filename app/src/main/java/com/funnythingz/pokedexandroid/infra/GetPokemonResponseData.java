@@ -1,4 +1,4 @@
-package infra;
+package com.funnythingz.pokedexandroid.infra;
 
 import com.google.gson.annotations.SerializedName;
 

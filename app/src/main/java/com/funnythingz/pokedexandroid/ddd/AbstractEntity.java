@@ -1,4 +1,4 @@
-package ddd;
+package com.funnythingz.pokedexandroid.ddd;
 
 @SuppressWarnings("serial")
 public class AbstractEntity<ID extends Identity<?>> implements Entity<ID> {

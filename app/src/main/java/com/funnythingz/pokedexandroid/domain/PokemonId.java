@@ -1,6 +1,6 @@
-package domain;
+package com.funnythingz.pokedexandroid.domain;
 
-import ddd.AbstractIdentity;
+import com.funnythingz.pokedexandroid.ddd.AbstractIdentity;
 
 public class PokemonId extends AbstractIdentity<String> {
 

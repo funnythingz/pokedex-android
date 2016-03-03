@@ -8,10 +8,9 @@ import android.widget.ArrayAdapter;
 
 import com.funnythingz.pokedexandroid.R;
 import com.funnythingz.pokedexandroid.adapter.holder.PokemonListViewHolder;
+import com.funnythingz.pokedexandroid.domain.Pokemon;
 
 import java.util.List;
-
-import domain.Pokemon;
 
 public class PokemonListAdapter extends ArrayAdapter<Pokemon> {
 

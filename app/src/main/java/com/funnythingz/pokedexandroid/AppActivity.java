@@ -8,17 +8,22 @@ import android.util.Log;
 import android.widget.ListView;
 
 import com.funnythingz.pokedexandroid.adapter.PokemonListAdapter;
+import com.funnythingz.pokedexandroid.domain.Pokemon;
+import com.funnythingz.pokedexandroid.domain.PokemonRepository;
+import com.funnythingz.pokedexandroid.helper.RxBusProvider;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import domain.Pokemon;
-import domain.PokemonRepository;
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class AppActivity extends AppCompatActivity {
+
+    private CompositeSubscription compositeSubscription;
 
     @Bind(R.id.pokemon_list_view)
     ListView pokemonListView;
@@ -49,9 +54,30 @@ public class AppActivity extends AppCompatActivity {
 
             @Override
             public void onNext(List<Pokemon> pokemons) {
-                pokemonListView.setAdapter(new PokemonListAdapter(getApplicationContext(), R.layout.adapter_pokemon_list, pokemons));
+                RxBusProvider.getInstance().send(pokemons);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        compositeSubscription = new CompositeSubscription();
+        compositeSubscription.add(RxBusProvider.getInstance()
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pokemons -> {
+                    if (pokemons instanceof List<?>) {
+                        pokemonListView.setAdapter(new PokemonListAdapter(getApplicationContext(), R.layout.adapter_pokemon_list, (List<Pokemon>) pokemons));
+                    }
+                })
+        );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        compositeSubscription.unsubscribe();
     }
 
     @Override

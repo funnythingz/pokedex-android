@@ -1,4 +1,4 @@
-package domain;
+package com.funnythingz.pokedexandroid.domain;
 
 public class PokedexNumber {
     String value;
