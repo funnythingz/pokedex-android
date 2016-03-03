@@ -75,7 +75,7 @@ public class AppActivity extends AppCompatActivity {
 
     private void fetchPokemonListView() {
 
-        ProgressDialog progressDialog = DialogHelper.progressDialog(this, "しゅとくちゅう", false);
+        ProgressDialog progressDialog = DialogHelper.progressDialog(this, getString(R.string.pokemon_list_loading), false);
         progressDialog.show();
 
         Observable<List<Pokemon>> observable = PokemonRepository.getInstance().fetchPokemonList();
@@ -90,7 +90,7 @@ public class AppActivity extends AppCompatActivity {
             public void onError(Throwable e) {
                 Log.e("Error: ", "", e);
                 progressDialog.dismiss();
-                Toast.makeText(getApplication(), "つうしんできませんでした。", LENGTH_SHORT).show();
+                Toast.makeText(getApplication(), getString(R.string.pokemon_list_loading_error), LENGTH_SHORT).show();
             }
 
             @Override
