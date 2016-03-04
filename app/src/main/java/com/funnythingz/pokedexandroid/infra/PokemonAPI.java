@@ -10,8 +10,8 @@ import rx.Observable;
 public interface PokemonAPI {
 
     @GET("pokemon")
-    Observable<List<GetPokemonResponseData>> getPokemonResponseDataList();
+    Observable<List<GetPokemonListResponseData>> getPokemonResponseDataList();
 
     @GET("pokemon/{id}")
-    Observable<GetPokemonResponseData> getPokemonResponseData(@Path("id") String id);
+    Observable<GetPokemonListResponseData> getPokemonResponseData(@Path("id") String id);
 }

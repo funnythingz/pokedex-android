@@ -34,10 +34,11 @@ public class PokemonListAdapter extends ArrayAdapter<Pokemon> {
 
         Pokemon pokemon = getItem(position);
 
-        holder.nicknameTextView.setText(pokemon.getName().getValue());
+        holder.pokemonNumberTextView.setText(pokemon.getPokedexNumber().getValue());
+        holder.pokemonNameTextView.setText(pokemon.getName().getValue());
 
         if (pokemon.getNickname() != null) {
-            holder.nicknameTextView.setText(pokemon.getNickname().getValue());
+            holder.pokemonNameTextView.setText(pokemon.getNickname().getValue());
         }
 
         return convertView;
