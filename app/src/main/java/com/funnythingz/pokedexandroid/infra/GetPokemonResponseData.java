@@ -16,10 +16,18 @@ public class GetPokemonResponseData {
     @SerializedName("url")
     private String url;
 
-    public GetPokemonResponseData(int id, String name, String url) {
+    @SerializedName("height")
+    private int height;
+
+    @SerializedName("weight")
+    private int weight;
+
+    public GetPokemonResponseData(int id, String name, String url, int height, int weight) {
         this.id = id;
         this.name = name;
         this.url = url;
+        this.height = height;
+        this.weight = weight;
     }
 
     public String getId() {
@@ -39,5 +47,13 @@ public class GetPokemonResponseData {
 
     public String getUrl() {
         return url;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 }
