@@ -27,7 +27,7 @@ import rx.subscriptions.CompositeSubscription;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class AppActivity extends AppCompatActivity {
+public class PokemonListActivity extends AppCompatActivity {
 
     private CompositeSubscription compositeSubscription;
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ポケモンずかん(雑)</string>
+    <string name="app_name">ポケモンずかんぽいもの</string>
 
     <string name="pokemon_list_loading">しゅとくちゅう</string>
     <string name="pokemon_list_loading_error">つうしんできませんでした</string>
