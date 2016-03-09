@@ -2,34 +2,26 @@ package com.funnythingz.pokedexandroid.infra;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class GetPokemonListResponseData {
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("count")
+    private int count;
 
-    @SerializedName("url")
-    private String url;
+    @SerializedName("results")
+    private List<GetPokemonResponseData> getPokemonResponseDataList;
 
-    public GetPokemonListResponseData(String name, String url) {
-        this.name = name;
-        this.url = url;
+    public GetPokemonListResponseData(int count, List<GetPokemonResponseData> getPokemonResponseDataList) {
+        this.count = count;
+        this.getPokemonResponseDataList = getPokemonResponseDataList;
     }
 
-    public String getName() {
-        return name;
+    public int getCount() {
+        return count;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public String getId() {
-        Pattern pattern = Pattern.compile("pokemon\\/([0-9]+)\\/$");
-        Matcher matcher = pattern.matcher(url);
-        matcher.find();
-        return matcher.group(1);
+    public List<GetPokemonResponseData> getPokemonResponseDataList() {
+        return getPokemonResponseDataList;
     }
 }

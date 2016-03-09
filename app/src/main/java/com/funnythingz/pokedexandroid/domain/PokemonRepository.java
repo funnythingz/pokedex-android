@@ -37,6 +37,6 @@ public class PokemonRepository {
         return pokemonAPI.getPokemonResponseDataList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(PokemonFactory::createPokemonList);
+                .map(m -> PokemonFactory.createPokemonList(m.getPokemonResponseDataList()));
     }
 }
