@@ -39,4 +39,11 @@ public class PokemonRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(m -> PokemonFactory.createPokemonList(m.getPokemonResponseDataList()));
     }
+
+    public Observable<Pokemon> fetchPokemon(String id) {
+        return pokemonAPI.getPokemonResponseData(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(PokemonFactory::createPokemon);
+    }
 }

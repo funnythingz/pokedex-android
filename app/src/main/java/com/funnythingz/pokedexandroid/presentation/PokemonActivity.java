@@ -1,12 +1,13 @@
 package com.funnythingz.pokedexandroid.presentation;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ListView;
+import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.funnythingz.pokedexandroid.R;
@@ -14,9 +15,6 @@ import com.funnythingz.pokedexandroid.domain.Pokemon;
 import com.funnythingz.pokedexandroid.domain.PokemonRepository;
 import com.funnythingz.pokedexandroid.helper.DialogHelper;
 import com.funnythingz.pokedexandroid.helper.RxBusProvider;
-import com.funnythingz.pokedexandroid.presentation.adapter.PokemonListAdapter;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,23 +25,32 @@ import rx.subscriptions.CompositeSubscription;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class PokemonListActivity extends AppCompatActivity {
+public class PokemonActivity extends AppCompatActivity {
 
     private CompositeSubscription compositeSubscription;
 
-    @Bind(R.id.pokemon_list_view)
-    ListView pokemonListView;
+    private String pokemonNumber;
 
-    @Bind(R.id.refresh)
-    SwipeRefreshLayout refreshLayout;
+    @Bind(R.id.pokemon_id_text_view)
+    TextView pokemonIdTextView;
+
+    @Bind(R.id.pokemon_name_text_view)
+    TextView pokemonNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pokemon_list);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        setContentView(R.layout.activity_pokemon);
         ButterKnife.bind(this);
-        refreshLayout.setOnRefreshListener(onRefreshListener);
-        fetchPokemonListView();
+
+        Intent intent = getIntent();
+        pokemonNumber = intent.getStringExtra("pokemonNumber");
+
+        fetchPokemonView();
     }
 
     @Override
@@ -51,13 +58,16 @@ public class PokemonListActivity extends AppCompatActivity {
         super.onResume();
         compositeSubscription = new CompositeSubscription();
         compositeSubscription.add(RxBusProvider.getInstance()
-                        .toObservable()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(pokemons -> {
-                            if (pokemons instanceof List<?>) {
-                                pokemonListView.setAdapter(new PokemonListAdapter(getApplicationContext(), R.layout.adapter_pokemon_list, (List<Pokemon>) pokemons));
-                            }
-                        })
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pokemon -> {
+                    if (pokemon instanceof Pokemon) {
+                        Pokemon p = (Pokemon) pokemon;
+                        setTitle(p.getName().getValue());
+                        pokemonIdTextView.setText(p.getPokedexNumber().getValue());
+                        pokemonNameTextView.setText(p.getName().getValue());
+                    }
+                })
         );
     }
 
@@ -73,13 +83,13 @@ public class PokemonListActivity extends AppCompatActivity {
         ButterKnife.unbind(this);
     }
 
-    private void fetchPokemonListView() {
+    private void fetchPokemonView() {
 
         ProgressDialog progressDialog = DialogHelper.progressDialog(this, getString(R.string.pokemon_list_loading), false);
         progressDialog.show();
 
-        Observable<List<Pokemon>> observable = PokemonRepository.getInstance().fetchPokemonList();
-        observable.subscribe(new Observer<List<Pokemon>>() {
+        Observable<Pokemon> observable = PokemonRepository.getInstance().fetchPokemon(pokemonNumber);
+        observable.subscribe(new Observer<Pokemon>() {
             @Override
             public void onCompleted() {
                 Log.d("Completed", "");
@@ -94,22 +104,19 @@ public class PokemonListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNext(List<Pokemon> pokemons) {
-                RxBusProvider.getInstance().send(pokemons);
+            public void onNext(Pokemon pokemon) {
+                RxBusProvider.getInstance().send(pokemon);
             }
         });
     }
 
-    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    refreshLayout.setRefreshing(false);
-                    fetchPokemonListView();
-                }
-            });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 }
