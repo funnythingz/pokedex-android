@@ -85,8 +85,8 @@ public class PokemonActivity extends AppCompatActivity {
 
     private void fetchPokemonView() {
 
-        ProgressDialog progressDialog = DialogHelper.progressDialog(this, getString(R.string.pokemon_list_loading), false);
-        progressDialog.show();
+        DialogHelper progressDialog = DialogHelper.newInstance(null, getString(R.string.pokemon_list_loading), false);
+        progressDialog.show(getFragmentManager(), "progress");
 
         Observable<Pokemon> observable = PokemonRepository.getInstance().fetchPokemon(pokemonNumber);
         observable.subscribe(new Observer<Pokemon>() {
