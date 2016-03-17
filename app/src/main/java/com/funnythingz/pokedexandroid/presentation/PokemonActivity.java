@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.funnythingz.pokedexandroid.R;
 import com.funnythingz.pokedexandroid.domain.Pokemon;
 import com.funnythingz.pokedexandroid.domain.PokemonRepository;
-import com.funnythingz.pokedexandroid.helper.DialogHelper;
+import com.funnythingz.pokedexandroid.helper.SpinningProgressDialog;
 import com.funnythingz.pokedexandroid.helper.RxBusProvider;
 
 import butterknife.Bind;
@@ -84,8 +84,8 @@ public class PokemonActivity extends AppCompatActivity {
 
     private void fetchPokemonView() {
 
-        DialogHelper progressDialog = DialogHelper.newInstance(null, getString(R.string.pokemon_list_loading), false);
-        progressDialog.show(getFragmentManager(), "progress");
+        SpinningProgressDialog progressDialog = SpinningProgressDialog.create(getString(R.string.pokemon_list_loading));
+        progressDialog.show(getFragmentManager(), "progressDialog");
 
         Observable<Pokemon> observable = PokemonRepository.getInstance().fetchPokemon(pokemonNumber);
         observable.subscribe(new Observer<Pokemon>() {

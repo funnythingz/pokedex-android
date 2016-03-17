@@ -6,14 +6,19 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-public class DialogHelper extends DialogFragment {
+// TODO: Factory化できそう
+public class SpinningProgressDialog extends DialogFragment {
 
     private static String TITLE = "title";
     private static String MESSAGE = "message";
     private static String CANCELABLE = "cancelable";
 
-    public static DialogHelper newInstance(@Nullable String title, String message, boolean cancelable) {
-        DialogHelper fragment = new DialogHelper();
+    public static SpinningProgressDialog create(String message) {
+        return SpinningProgressDialog.create(null, message, false);
+    }
+
+    public static SpinningProgressDialog create(@Nullable String title, String message, boolean cancelable) {
+        SpinningProgressDialog fragment = new SpinningProgressDialog();
         Bundle args = new Bundle();
         args.putString(TITLE, title);
         args.putString(MESSAGE, message);
