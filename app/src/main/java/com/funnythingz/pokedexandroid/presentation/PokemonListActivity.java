@@ -1,6 +1,5 @@
 package com.funnythingz.pokedexandroid.presentation;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 import com.funnythingz.pokedexandroid.R;
 import com.funnythingz.pokedexandroid.domain.Pokemon;
 import com.funnythingz.pokedexandroid.domain.PokemonRepository;
-import com.funnythingz.pokedexandroid.helper.DialogHelper;
+import com.funnythingz.pokedexandroid.helper.SpinningProgressDialog;
 import com.funnythingz.pokedexandroid.helper.RxBusProvider;
 import com.funnythingz.pokedexandroid.presentation.adapter.PokemonListAdapter;
 
@@ -75,8 +74,8 @@ public class PokemonListActivity extends AppCompatActivity {
 
     private void fetchPokemonListView() {
 
-        ProgressDialog progressDialog = DialogHelper.progressDialog(this, getString(R.string.pokemon_list_loading), false);
-        progressDialog.show();
+        SpinningProgressDialog progressDialog = SpinningProgressDialog.create(getString(R.string.pokemon_list_loading));
+        progressDialog.show(getFragmentManager(), "progressDialog");
 
         Observable<List<Pokemon>> observable = PokemonRepository.getInstance().fetchPokemonList();
         observable.subscribe(new Observer<List<Pokemon>>() {
